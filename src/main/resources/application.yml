@@ -1,0 +1,21 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: wholesale-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/sale
+    username: postgres
+    password: 1111
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+jwt:
+  secret: wholesale
+  refreshToken:
+    expirationTime: 360000
+  accessToken:
+    expirationTime: 360000
