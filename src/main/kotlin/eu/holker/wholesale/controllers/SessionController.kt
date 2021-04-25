@@ -4,6 +4,7 @@ import eu.holker.wholesale.persistance.dto.request.LoginForm
 import eu.holker.wholesale.security.JwtUtils
 import eu.holker.wholesale.services.SessionService
 import eu.holker.wholesale.services.UserService
+import eu.holker.wholesale.utils.errors.LoginFailedException
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -51,17 +52,21 @@ class SessionController @Autowired constructor(
         request: HttpServletRequest,
         response: HttpServletResponse
     ): ResponseEntity<*> {
-        val user = userService.findByEmail(loginForm.email)
-        if (sessionService.isPasswordMatches(loginForm.password, user)) {
-            val accessCookie =
-                Cookie("access_token", jwtUtils.generateToken(User(user.email, user.password, user.roles)))
-            val refreshCookie =
-                Cookie("access_token", jwtUtils.generateToken(User(user.email, user.password, user.roles)))
-            response.addCookie(accessCookie)
-            response.addCookie(refreshCookie)
-            return ResponseEntity<Nothing>(HttpStatus.OK)
-        } else {
-            throw Exception("Credentials are wrong")
+        try {
+            val user = userService.findByEmail(loginForm.email)
+            if (sessionService.isPasswordMatches(loginForm.password, user)) {
+                val accessCookie =
+                    Cookie("access_token", jwtUtils.generateToken(User(user.email, user.password, user.roles)))
+                val refreshCookie =
+                    Cookie("access_token", jwtUtils.generateToken(User(user.email, user.password, user.roles)))
+                response.addCookie(accessCookie)
+                response.addCookie(refreshCookie)
+                return ResponseEntity<Nothing>(HttpStatus.OK)
+            } else {
+                throw Exception("Credentials are wrong")
+            }
+        } catch (e: Exception) {
+            throw LoginFailedException("User doesn't exists")
         }
     }
 }

@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service
 class UserDetailsServiceImpl @Autowired constructor(private val userService: UserService) : UserDetailsService {
     private val logger = KotlinLogging.logger { }
 
-    override fun loadUserByUsername(username: String?): UserDetails {
-        val user = userService.findByUsername(username ?: "")
+    override fun loadUserByUsername(email: String?): UserDetails {
+        val user = userService.findByEmail(email ?: "")
         //TODO: Add roles here
-        return User(user.username, user.password, listOf())
+        return User(user.email, user.password, listOf())
     }
 }
