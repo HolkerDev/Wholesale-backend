@@ -1,6 +1,6 @@
 package eu.holker.wholesale.security
 
-import eu.holker.wholesale.utils.errors.WrongRefreshTokenException
+import eu.holker.wholesale.utils.errors.WrongTokenException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
@@ -39,12 +39,21 @@ class JwtUtils {
             .signWith(SignatureAlgorithm.ES256, secretKey).compact()
     }
 
-    fun extractUsername(token: String): String {
+    fun extractUsernameFromToken(token: String): String {
         try {
             val jwtToken = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
             return jwtToken.body.subject
         } catch (e: Exception) {
-            throw WrongRefreshTokenException("Provided token is wrong.")
+            throw WrongTokenException("Provided token is wrong.")
+        }
+    }
+
+    fun validateAccessToken(token: String): Boolean {
+        try {
+            Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token)
+            return true
+        } catch (e: Exception) {
+            throw WrongTokenException("Provided token is wrong.")
         }
     }
 }

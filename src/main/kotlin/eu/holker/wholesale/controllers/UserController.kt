@@ -8,6 +8,4 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/users")
 class UserController {
     private val logger = KotlinLogging.logger {}
-
-
 }
