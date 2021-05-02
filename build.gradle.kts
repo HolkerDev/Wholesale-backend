@@ -4,12 +4,13 @@ plugins {
     id("org.springframework.boot") version "2.4.4"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.4.31"
+    id("com.google.cloud.tools.jib") version "1.2.0"
     kotlin("plugin.spring") version "1.4.31"
-    id ("org.jetbrains.kotlin.plugin.allopen") version "1.4.32"
+    id("org.jetbrains.kotlin.plugin.allopen") version "1.4.32"
 }
 
 group = "eu.holker"
-version = "0.0.1-SNAPSHOT"
+version = ""
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
